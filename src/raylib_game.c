@@ -222,45 +222,45 @@ static void UpdateDrawFrame(void)
 
     if (!onTransition)
     {
-        switch(currentScreen)
+        switch (currentScreen)
         {
             case LOGO:
             {
                 UpdateLogoScreen();
 
                 if (FinishLogoScreen()) TransitionToScreen(TITLE);
-
-            } break;
+            }
+            break;
             case TITLE:
             {
                 UpdateTitleScreen();
 
                 if (FinishTitleScreen() == 1) TransitionToScreen(OPTIONS);
                 else if (FinishTitleScreen() == 2) TransitionToScreen(GAMEPLAY);
-
-            } break;
+            }
+            break;
             case OPTIONS:
             {
                 UpdateOptionsScreen();
 
                 if (FinishOptionsScreen()) TransitionToScreen(TITLE);
-
-            } break;
+            }
+            break;
             case GAMEPLAY:
             {
                 UpdateGameplayScreen();
 
                 if (FinishGameplayScreen() == 1) TransitionToScreen(ENDING);
                 //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
-
-            } break;
+            }
+            break;
             case ENDING:
             {
                 UpdateEndingScreen();
 
                 if (FinishEndingScreen() == 1) TransitionToScreen(TITLE);
-
-            } break;
+            }
+            break;
             default: break;
         }
     }
@@ -271,20 +271,20 @@ static void UpdateDrawFrame(void)
     //----------------------------------------------------------------------------------
     BeginDrawing();
 
-        ClearBackground(RAYWHITE);
+    ClearBackground(RAYWHITE);
 
-        switch(currentScreen)
-        {
-            case LOGO: DrawLogoScreen(); break;
-            case TITLE: DrawTitleScreen(); break;
-            case OPTIONS: DrawOptionsScreen(); break;
-            case GAMEPLAY: DrawGameplayScreen(); break;
-            case ENDING: DrawEndingScreen(); break;
-            default: break;
-        }
+    switch (currentScreen)
+    {
+        case LOGO: DrawLogoScreen(); break;
+        case TITLE: DrawTitleScreen(); break;
+        case OPTIONS: DrawOptionsScreen(); break;
+        case GAMEPLAY: DrawGameplayScreen(); break;
+        case ENDING: DrawEndingScreen(); break;
+        default: break;
+    }
 
         // Draw full screen rectangle in front of everything
-        if (onTransition) DrawTransition();
+    if (onTransition) DrawTransition();
 
         //DrawFPS(10, 10);
 

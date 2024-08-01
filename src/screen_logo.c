@@ -57,8 +57,8 @@ void InitLogoScreen(void)
     framesCounter = 0;
     lettersCount = 0;
 
-    logoPositionX = GetScreenWidth()/2 - 128;
-    logoPositionY = GetScreenHeight()/2 - 128;
+    logoPositionX = GetScreenWidth() / 2 - 128;
+    logoPositionY = GetScreenHeight() / 2 - 128;
 
     topSideRecWidth = 16;
     leftSideRecHeight = 16;
@@ -102,7 +102,7 @@ void UpdateLogoScreen(void)
 
         if (lettersCount < 10)
         {
-            if (framesCounter/12)   // Every 12 frames, one more letter!
+            if (framesCounter / 12)   // Every 12 frames, one more letter!
             {
                 lettersCount++;
                 framesCounter = 0;
@@ -129,7 +129,7 @@ void DrawLogoScreen(void)
 {
     if (state == 0)         // Draw blinking top-left square corner
     {
-        if ((framesCounter/10)%2) DrawRectangle(logoPositionX, logoPositionY, 16, 16, BLACK);
+        if ((framesCounter / 10) % 2) DrawRectangle(logoPositionX, logoPositionY, 16, 16, BLACK);
     }
     else if (state == 1)    // Draw bars animation: top and left
     {
@@ -152,9 +152,11 @@ void DrawLogoScreen(void)
         DrawRectangle(logoPositionX + 240, logoPositionY + 16, 16, rightSideRecHeight - 32, Fade(BLACK, alpha));
         DrawRectangle(logoPositionX, logoPositionY + 240, bottomSideRecWidth, 16, Fade(BLACK, alpha));
 
-        DrawRectangle(GetScreenWidth()/2 - 112, GetScreenHeight()/2 - 112, 224, 224, Fade(RAYWHITE, alpha));
+        DrawRectangle(GetScreenWidth() / 2 - 112, GetScreenHeight() / 2 - 112, 224, 224, Fade(RAYWHITE, alpha));
 
-        DrawText(TextSubtext("raylib", 0, lettersCount), GetScreenWidth()/2 - 44, GetScreenHeight()/2 + 48, 50, Fade(BLACK, alpha));
+        DrawText(
+            TextSubtext("raylib", 0, lettersCount), GetScreenWidth() / 2 - 44, GetScreenHeight() / 2 + 48, 50,
+            Fade(BLACK, alpha));
 
         if (framesCounter > 20) DrawText("powered by", logoPositionX, logoPositionY - 27, 20, Fade(DARKGRAY, alpha));
     }
