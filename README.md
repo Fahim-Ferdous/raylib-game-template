@@ -1,54 +1,20 @@
 -----------------------------------
 
-_DISCLAIMER:_
+## Prerequisite
+Run the following to add raylib.
+```sh
+git submodule update --init --recursive
+```
 
-Welcome to **raylib game template**!
+### Make
+Just `cd` into `./src` and run `make`. This will also build raylib.
+```sh
+cd ./src/ ; make
+```
 
-This template provides a base structure to start developing a small raylib game in plain C. The repo is also pre-configured with a default `LICENSE` (zlib/libpng) and a `README.md` (this one) to be properly filled by users. Feel free to change the LICENSE as required.
-
-All the sections defined by `$(Data to Fill)` are expected to be edited and filled properly. It's recommended to delete this disclaimer message after editing this `README.md` file.
-
-This template has been created to be used with raylib (www.raylib.com) and it's licensed under an unmodified zlib/libpng license.
-
-_Copyright (c) 2014-2024 Ramon Santamaria ([@raysan5](https://twitter.com/raysan5))_
+> if you want to build in release mode then run the `./build-docker-releases.sh` file.
 
 -----------------------------------
-## Getting Started with this template
-
-You can use this templates in some ways. Using Visual Studio, using CMake or make your own build setup. This repository come with Visual Studio and CMake already setuped.
-
-Chose one of the follow setup, that fit in you development enviroment.
-
-### Visual Studio
-
-- After extracting the zip, the parent folder `raylib-game-template` should exist in the same directory as `raylib` itself.  So your file structure should look like this:
-    - Some parent directory
-        - `raylib`
-            - the contents of https://github.com/raysan5/raylib
-        - `raylib-game-template`
-            - this `README.md` and all other raylib-game-template files
-- If using Visual Studio, open projects/VS2022/raylib-game-template.sln
-- Select on `raylib_game` in the solution explorer, then in the toolbar at the top, click `Project` > `Set as Startup Project`
-- Now you're all set up!  Click `Local Windows Debugger` with the green play arrow and the project will run.
-
-### CMake
-
-- Extract the zip of this project
-- Type the follow command:
-
-```sh
-cmake -S . -B build
-```
-
-> if you want with debug symbols put the flag `-DCMAKE_BUILD_TYPE=Debug`
-
-- After CMake config you project build:
-
-```sh
-cmake --build build
-```
-
-- Inside the build folder are another folder (named the same as the project name on CMakeLists.txt) with the executable and resources folder.
 
 ## $(Game Title)
 

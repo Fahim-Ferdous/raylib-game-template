@@ -31,9 +31,10 @@ PLATFORM              ?= PLATFORM_DESKTOP
 # Define project variables
 PROJECT_NAME          ?= raylib_game
 PROJECT_VERSION       ?= 1.0
-PROJECT_BUILD_PATH    ?= .
+INSTALL_PATH          ?= ../dist
 
-RAYLIB_PATH           ?= ../../raylib
+RAYLIB_PATH           ?= ../raylib
+RAYGUI_PATH           ?= ../raygui
 
 # Locations of raylib.h and libraylib.a/libraylib.so
 # NOTE: Those variables are only used for PLATFORM_OS: LINUX, BSD
@@ -44,11 +45,11 @@ RAYLIB_LIB_PATH       ?= /usr/local/lib
 RAYLIB_LIBTYPE        ?= STATIC
 
 # Build mode for project: DEBUG or RELEASE
-BUILD_MODE            ?= RELEASE
+BUILD_MODE            ?= DEBUG
 
 # Use Wayland display server protocol on Linux desktop (by default it uses X11 windowing system)
 # NOTE: This variable is only used for PLATFORM_OS: LINUX
-USE_WAYLAND_DISPLAY   ?= FALSE
+USE_WAYLAND_DISPLAY   ?= TRUE
 
 # PLATFORM_WEB: Default properties
 BUILD_WEB_ASYNCIFY    ?= FALSE
@@ -216,7 +217,7 @@ endif
 CFLAGS = -std=c99 -Wall -Wno-missing-braces -Wunused-result -D_DEFAULT_SOURCE
 
 ifeq ($(BUILD_MODE),DEBUG)
-    CFLAGS += -g -D_DEBUG
+    CFLAGS += -g -D_DEBUG -DRAYGUI_DEBUG_RECS_BOUNDS -DRAYGUI_DEBUG_TEXT_BOUNDS
 else
     ifeq ($(PLATFORM),PLATFORM_WEB)
         ifeq ($(BUILD_WEB_ASYNCIFY),TRUE)
@@ -224,8 +225,9 @@ else
         else
             CFLAGS += -Os
         endif
+        CFLAGS += -flto -O2 -fdata-sections -ffunction-sections -fno-ident  -Wl,--gc-sections
     else
-        CFLAGS += -s -O2
+        CFLAGS += -s -Os -O2 -fdata-sections -ffunction-sections -fdce -fno-ident -fno-asynchronous-unwind-tables -Wl,--gc-sections
     endif
 endif
 
@@ -252,7 +254,7 @@ endif
 # Define include paths for required headers: INCLUDE_PATHS
 # NOTE: Some external/extras libraries could be required (stb, physac, easings...)
 #------------------------------------------------------------------------------------------------
-INCLUDE_PATHS = -I. -I$(RAYLIB_PATH)/src -I$(RAYLIB_PATH)/src/external -I$(RAYLIB_PATH)/src/extras
+INCLUDE_PATHS = -I. -I$(RAYLIB_PATH)/src -I$(RAYLIB_PATH)/src/external -I$(RAYLIB_PATH)/src/extras -I${RAYGUI_PATH}/src
 
 # Define additional directories containing required header files
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
@@ -277,7 +279,7 @@ endif
 
 # Define library paths containing required libs: LDFLAGS
 #------------------------------------------------------------------------------------------------
-LDFLAGS = -L. -L$(RAYLIB_RELEASE_PATH) -L$(RAYLIB_PATH)/src
+LDFLAGS = -L. -L$(RAYLIB_RELEASE_PATH) -L$(RAYLIB_PATH)/src -L${RAYGUI_PATH}/src -L${RAYGUI_PATH}
 
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     ifeq ($(PLATFORM_OS),WINDOWS)
@@ -424,8 +426,11 @@ endif
 
 # Default target entry
 # NOTE: We call this Makefile target or Makefile.Android target
-all:
+all: raylib
 	$(MAKE) $(MAKEFILE_PARAMS)
+
+raylib:
+	$(MAKE) -C $(RAYLIB_PATH)/src
 
 # Project target defined by PROJECT_NAME
 $(PROJECT_NAME): $(OBJS)
@@ -451,7 +456,7 @@ ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     endif
 endif
 
-.PHONY: clean_shell_cmd clean_shell_sh
+.PHONY: clean_shell_cmd clean_shell_sh install
 
 # Clean everything
 clean:	clean_shell_$(PLATFORM_SHELL)
@@ -489,3 +494,19 @@ endif
 clean_shell_cmd: SHELL=cmd
 clean_shell_cmd:
 	del *.o *.exe $(PROJECT_NAME).data $(PROJECT_NAME).html $(PROJECT_NAME).js $(PROJECT_NAME).wasm /s
+
+install:
+ifeq ($(PLATFORM),PLATFORM_DESKTOP)
+    ifeq ($(PLATFORM_OS),LINUX)
+	@test -d ${INSTALL_PATH}/linux || mkdir -pv ${INSTALL_PATH}/linux
+	install -m 0755 -t ${INSTALL_PATH}/linux ${PROJECT_NAME}
+    else ifeq ($(PLATFORM_OS),WINDOWS)
+	@test -d ${INSTALL_PATH}/windows || mkdir -pv ${INSTALL_PATH}/windows
+	install -m 0755 -t ${INSTALL_PATH}/windows ${PROJECT_NAME}.exe
+    endif
+endif
+ifeq ($(PLATFORM),PLATFORM_WEB)
+	@test -d ${INSTALL_PATH}/web || mkdir -pv ${INSTALL_PATH}/web
+	install -m 0644 -t ${INSTALL_PATH}/web ${PROJECT_NAME}.data ${PROJECT_NAME}.html ${PROJECT_NAME}.js
+	install -m 0755 -t ${INSTALL_PATH}/web ${PROJECT_NAME}.wasm
+endif
