@@ -1,4 +1,4 @@
-FROM debian:stable-slim
+FROM debian:stable-20240722-slim
 
 RUN apt update -y && apt install -y \
     git \

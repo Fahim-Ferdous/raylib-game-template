@@ -1,4 +1,4 @@
-FROM dockcross/windows-static-x64:latest
+FROM dockcross/windows-static-x64:20240808-1276ade
 
 RUN ln -s /bin/make /bin/mingw32-make
 
