@@ -29,10 +29,10 @@ AlignConsecutiveMacros:
     AlignCompound: false
     PadOperators: false
 AlignConsecutiveShortCaseStatements:
-    Enabled: false
+    Enabled: true
     AcrossEmptyLines: true
     AcrossComments: true
-    AlignCaseColons: false
+    AlignCaseColons: true
 AlignEscapedNewlines: Right
 AlignOperands: Align
 AlignTrailingComments:
